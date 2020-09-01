@@ -29,6 +29,7 @@ public class Home extends javax.swing.JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        this.$btn_calTerminales.setEnabled(false);
     }
 
     public void mostrarArbol() {
@@ -63,7 +64,7 @@ public class Home extends javax.swing.JFrame {
         $btn_preOrden = new javax.swing.JButton();
         $btn_inOrden = new javax.swing.JButton();
         $btn_postOrden = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        $btn_porNiveles = new javax.swing.JButton();
         $dato = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jDesktopPane1 = new javax.swing.JDesktopPane();
@@ -109,14 +110,14 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addContainerGap())
+                .addGap(111, 111, 111))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addContainerGap())
+                .addGap(31, 31, 31))
         );
 
         $btn_insertar.setBackground(new java.awt.Color(6, 47, 79));
@@ -182,9 +183,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jButton8.setBackground(new java.awt.Color(6, 47, 79));
-        jButton8.setForeground(new java.awt.Color(255, 255, 255));
-        jButton8.setText("Por niveles");
+        $btn_porNiveles.setBackground(new java.awt.Color(6, 47, 79));
+        $btn_porNiveles.setForeground(new java.awt.Color(255, 255, 255));
+        $btn_porNiveles.setText("Por niveles");
+        $btn_porNiveles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                $btn_porNivelesActionPerformed(evt);
+            }
+        });
 
         $dato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -264,7 +270,7 @@ public class Home extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent($btn_postOrden)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton8))
+                        .addComponent($btn_porNiveles))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(457, 457, 457)
                         .addComponent($dato, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -296,8 +302,8 @@ public class Home extends javax.swing.JFrame {
                     .addComponent($btn_inOrden)
                     .addComponent($btn_preOrden)
                     .addComponent($btn_postOrden)
-                    .addComponent(jButton8))
-                .addGap(45, 45, 45)
+                    .addComponent($btn_porNiveles))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -305,26 +311,38 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void $btn_insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_insertarActionPerformed
-        try {
-            double dato = Double.parseDouble($dato.getText());
-            this.simuladorArbol.addNodo(dato);
-            this.mostrarArbol();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "No se pudo insertar el dato", "Intenta de nuevo...", 0);
-
+        if (!$dato.getText().isEmpty()) {
+            try {
+                double dato = Double.parseDouble($dato.getText());
+                this.simuladorArbol.addNodo(dato);
+                this.mostrarArbol();
+                $dato.setText("");
+                $dato.requestFocus();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "No se pudo insertar el dato", "Intenta de nuevo...", 0);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pued insertar un nodo vacio", "Intenta de nuevo...", 0);
         }
     }//GEN-LAST:event_$btn_insertarActionPerformed
 
     private void $btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_eliminarActionPerformed
-           try {
-            double dato = Double.parseDouble($dato.getText());
-            this.simuladorArbol.addNodo(dato);
-            this.mostrarArbol();
-            $dato.setText("");
-            $dato.requestFocus();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "No se pudo insertar el dato", "Intenta de nuevo...", 0);
-
+        if (!$dato.getText().isEmpty() || simuladorArbol == null) {
+            try {
+                double dato = Double.parseDouble($dato.getText());
+                this.simuladorArbol.eliminarNodo(dato);
+                this.mostrarArbol();
+                $dato.setText("");
+                $dato.requestFocus();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "No se pudo eliminar el dato", "Intenta de nuevo...", 0);
+            }
+        } else {
+            if ($dato.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Introduzca el nodo a eliminar", "Intenta de nuevo...", 0);
+            } else {
+                JOptionPane.showMessageDialog(null, "El arbol está vacio", "Inserta un nuvo nodo", 0);
+            }
         }
     }//GEN-LAST:event_$btn_eliminarActionPerformed
 
@@ -334,12 +352,12 @@ public class Home extends javax.swing.JFrame {
 
     private void $btn_calcAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_calcAlturaActionPerformed
         int altura = simuladorArbol.alturaArbol(simuladorArbol.getRaiz());
-        JOptionPane.showMessageDialog(this, "El árbol binario posee una altua de: " + Integer.toString(altura) + " niveles");
+        JOptionPane.showMessageDialog(this, "El árbol binario posee una altura de: " + Integer.toString(altura) + " niveles");
     }//GEN-LAST:event_$btn_calcAlturaActionPerformed
 
     private void $btn_postOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_postOrdenActionPerformed
         String recorrido = simuladorArbol.iterativePostOrder(simuladorArbol.getRaiz());
-        JOptionPane.showMessageDialog(this, "El recorrido post orden del árbol dinario es: " + recorrido );
+        JOptionPane.showMessageDialog(this, "El recorrido post orden del árbol binario es: " + recorrido);
     }//GEN-LAST:event_$btn_postOrdenActionPerformed
 
     private void $datoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$datoActionPerformed
@@ -348,13 +366,18 @@ public class Home extends javax.swing.JFrame {
 
     private void $btn_preOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_preOrdenActionPerformed
         String recorrido = simuladorArbol.iterativePreOrder(simuladorArbol.getRaiz());
-        JOptionPane.showMessageDialog(this, "El recorrido pre orden del árbol dinario es: " + recorrido);
+        JOptionPane.showMessageDialog(this, "El recorrido pre orden del árbol binario es: " + recorrido);
     }//GEN-LAST:event_$btn_preOrdenActionPerformed
 
     private void $btn_inOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_inOrdenActionPerformed
         String recorrido = simuladorArbol.iterativeInOrder(simuladorArbol.getRaiz());
-        JOptionPane.showMessageDialog(this, "El recorrido in orden del árbol dinario es: " + recorrido );
+        JOptionPane.showMessageDialog(this, "El recorrido in orden del árbol binario es: " + recorrido);
     }//GEN-LAST:event_$btn_inOrdenActionPerformed
+
+    private void $btn_porNivelesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_$btn_porNivelesActionPerformed
+        String recorrido = simuladorArbol.recorridoPorNivel(simuladorArbol.getRaiz());
+        JOptionPane.showMessageDialog(this, "El recorrido por nivel del árbol binario es: " + recorrido);
+    }//GEN-LAST:event_$btn_porNivelesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,10 +420,10 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton $btn_eliminar;
     private javax.swing.JButton $btn_inOrden;
     private javax.swing.JButton $btn_insertar;
+    private javax.swing.JButton $btn_porNiveles;
     private javax.swing.JButton $btn_postOrden;
     private javax.swing.JButton $btn_preOrden;
     private javax.swing.JTextField $dato;
-    private javax.swing.JButton jButton8;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;

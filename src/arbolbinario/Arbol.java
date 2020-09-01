@@ -93,7 +93,7 @@ public class Arbol {
                         break;
                     }
                     raiz = p.pop();
-                    recorrido += raiz.getNumero() + " ,";
+                    recorrido += raiz.getNumero() + ", ";
                     raiz = raiz.hijoDerecho;
                 }
             }
@@ -122,7 +122,7 @@ public class Arbol {
             while (p.empty() == false) {
 
                 raiz = p.pop();
-                recorrido = recorrido + raiz.getNumero() + " ,";
+                recorrido = recorrido + raiz.getNumero() + ", ";
                 if (raiz.hijoDerecho != null) {
                     p.push(raiz.hijoDerecho);
                 }
@@ -143,7 +143,7 @@ public class Arbol {
         } else {
             recorridoPostOrder(raiz.hijoIzquierdo);
             recorridoPostOrder(raiz.hijoDerecho);
-            recorrido = recorrido + raiz.getNumero() + "  ,";
+            recorrido = recorrido + raiz.getNumero() + ", ";
         }
         StringBuffer sb = new StringBuffer(recorrido);
         sb.deleteCharAt(sb.length() - 1);
@@ -170,7 +170,7 @@ public class Arbol {
             }
             while (p2.empty() == false) {
                 raiz = p2.pop();
-                recorrido = recorrido + raiz.getNumero() + "  ,";
+                recorrido = recorrido + raiz.getNumero() + ", ";
             }
         }
         StringBuffer sb = new StringBuffer(recorrido);
@@ -187,7 +187,7 @@ public class Arbol {
             cola.add(raiz);
             while (cola.isEmpty() == false) {
                 raiz = cola.poll();
-                numero = numero + raiz.getNumero() + "  ,";
+                numero = numero + raiz.getNumero() + ", ";
                 if (raiz.getIzq() != null) {
                     cola.add(raiz.hijoIzquierdo);
                 }
