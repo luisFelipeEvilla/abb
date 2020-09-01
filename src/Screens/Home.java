@@ -319,7 +319,7 @@ public class Home extends javax.swing.JFrame {
                 $dato.setText("");
                 $dato.requestFocus();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "No se pudo insertar el dato", "Intenta de nuevo...", 0);
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Intenta de nuevo...", 0);
             }
         } else {
             JOptionPane.showMessageDialog(null, "No se pued insertar un nodo vacio", "Intenta de nuevo...", 0);

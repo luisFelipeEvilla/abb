@@ -25,58 +25,90 @@ public class Arbol {
     }
 
     //inserta nodo
-    public void addNodo(double numero) {
+    public void addNodo(double numero) throws Exception {
         NodoArbol nuevoNodo = new NodoArbol(numero);
         //cuando el árbol este vacío 
         // la raíz sera el NuevoNodo
         if (raiz == null) {
             raiz = nuevoNodo;
-        } //no está vacío
-        //lo que hara es ir buscando donde insertar el NuevoNodo
-        else {
-            //Utilizar un apuntador que lleve la referencia del nodo padre a NuevoNodo
-            NodoArbol padre = raiz;
-            //Localizar espacio disponible para insertar NuevoNodo
-            // se localizara cuando llegue a null
-            NodoArbol aux = null;
-            while (true) {
-                //padre se va moviendo cadavez entre al ciclo
-                aux = padre;
-                // si el NuevoNodo tiene un numero menor se mueve al hijo izquierdo aux
-                if (numero < padre.getNumero()) {
-                    aux = aux.hijoIzquierdo;
-                    //encontro lugar 
-                    if (aux == null) {
-                        padre.hijoIzquierdo = nuevoNodo;
-                        return;
+        } else {
+            //No se permiten nodos repetidos
+            if (!repetido(raiz, nuevoNodo)) {
+                //no está vacío
+                //lo que hara es ir buscando donde insertar el NuevoNodo
+                //Utilizar un apuntador que lleve la referencia del nodo padre a NuevoNodo
+                NodoArbol padre = raiz;
+                //Localizar espacio disponible para insertar NuevoNodo
+                // se localizara cuando llegue a null
+                NodoArbol aux = null;
+                while (true) {
+                    //padre se va moviendo cadavez entre al ciclo
+                    aux = padre;
+                    // si el NuevoNodo tiene un numero menor se mueve al hijo izquierdo aux
+                    if (numero < padre.getNumero()) {
+                        aux = aux.hijoIzquierdo;
+                        //encontro lugar 
+                        if (aux == null) {
+                            padre.hijoIzquierdo = nuevoNodo;
+                            return;
 
-                    } //se va moviendo el padre
-                    else {
+                        } //se va moviendo el padre
+                        else {
 
-                        padre = aux;
-                    }
-                } // si el NuevoNodo tiene un numero mayor se mueve al hijo Derecha aux
-                else {
-                    aux = aux.hijoDerecho;
-                    //encontro lugar 
-                    if (aux == null) {
-                        padre.hijoDerecho = nuevoNodo;
-                        return;
-                    } //se va moviendo el padre
+                            padre = aux;
+                        }
+                    } // si el NuevoNodo tiene un numero mayor se mueve al hijo Derecha aux
                     else {
-                        padre = aux;
+                        aux = aux.hijoDerecho;
+                        //encontro lugar 
+                        if (aux == null) {
+                            padre.hijoDerecho = nuevoNodo;
+                            return;
+                        } //se va moviendo el padre
+                        else {
+                            padre = aux;
+                        }
                     }
                 }
+            } else {
+                throw new Exception("Error, no se pueden insertar nodos repetidos");
             }
         }
+
     }
 
-    public void recorridoInOrder(NodoArbol raiz) {
+public void recorridoInOrder(NodoArbol raiz) {
         if (raiz != null) {
             recorridoInOrder(raiz.hijoIzquierdo);
             System.out.println(raiz.getNumero());
             recorridoInOrder(raiz.hijoDerecho);
         }
+    }
+
+    public boolean repetido(NodoArbol raiz, NodoArbol nodo) {
+        boolean found = false;
+
+        if (raiz != null) {
+            Stack<NodoArbol> p = new Stack<NodoArbol>();
+            while (true) {
+                if (raiz != null) {
+                    if (raiz.getNumero() == nodo.getNumero()) {
+                        found = true;
+                        return found;
+                    }
+                    p.push(raiz);
+                    raiz = raiz.hijoIzquierdo;
+                } else {
+                    if (p.empty()) {
+                        break;
+                    }
+                    raiz = p.pop();
+                    raiz = raiz.hijoDerecho;
+                }
+            }
+        }
+
+        return found;
     }
 
     public String iterativeInOrder(NodoArbol raiz) {
@@ -243,43 +275,43 @@ public class Arbol {
                 //Elimina nodos con un solo hijo en este caso el nodo tiene hijo en la izqueirda
             } else if (auxiliar.getIzq() == null && auxiliar.getDer() != null) {
                 if (auxiliar == raiz) {
-                    raiz=padre.hijoDerecho;
+                    raiz = padre.hijoDerecho;
                 } else if (esHijoIzq) {
                     padre.hijoIzquierdo = auxiliar.hijoDerecho;
                 } else if (!esHijoIzq) {
                     padre.hijoDerecho = auxiliar.hijoDerecho;
                 }
                 //Elimina nodos con dos hijos
-            }else{
+            } else {
                 NodoArbol replace = getReplace(auxiliar);
-                 if (auxiliar == raiz) {
-                    raiz=replace;
+                if (auxiliar == raiz) {
+                    raiz = replace;
                 } else if (esHijoIzq) {
                     padre.hijoIzquierdo = replace;
                 } else if (!esHijoIzq) {
                     padre.hijoDerecho = replace;
                 }
-                 replace.hijoIzquierdo=auxiliar.hijoIzquierdo;
-            
+                replace.hijoIzquierdo = auxiliar.hijoIzquierdo;
+
             }
-            
 
         }
         System.out.println(auxiliar.getNumero());
 
     }
-        public NodoArbol getReplace(NodoArbol nodeReem) {
+
+    public NodoArbol getReplace(NodoArbol nodeReem) {
         NodoArbol reemplazarPadre = nodeReem;
-        NodoArbol reemplazo=nodeReem;
-        NodoArbol auxiliar=nodeReem.hijoDerecho; 
-        while(auxiliar!=null){
-            reemplazarPadre=reemplazo;
-            reemplazo=auxiliar;
-            auxiliar=auxiliar.hijoIzquierdo;
+        NodoArbol reemplazo = nodeReem;
+        NodoArbol auxiliar = nodeReem.hijoDerecho;
+        while (auxiliar != null) {
+            reemplazarPadre = reemplazo;
+            reemplazo = auxiliar;
+            auxiliar = auxiliar.hijoIzquierdo;
         }
-        if(reemplazo!=nodeReem.hijoDerecho){
-            reemplazarPadre.hijoIzquierdo=reemplazo.hijoDerecho;
-            reemplazo.hijoDerecho=nodeReem.hijoDerecho;
+        if (reemplazo != nodeReem.hijoDerecho) {
+            reemplazarPadre.hijoIzquierdo = reemplazo.hijoDerecho;
+            reemplazo.hijoDerecho = nodeReem.hijoDerecho;
         }
         return reemplazo;
     }
@@ -301,6 +333,5 @@ public class Arbol {
     public JPanel getDibujo() {
         return new ArbolGrafico(this);
     }
-
 
 }
